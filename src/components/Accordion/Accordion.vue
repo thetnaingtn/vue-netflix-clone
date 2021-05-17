@@ -5,6 +5,7 @@
       <div class="accordion-frame">
         <AccordionItem v-for="item in faqs" :key="item.id" v-bind="{ item }" />
       </div>
+      <Optform />
     </div>
   </div>
 </template>
@@ -12,10 +13,12 @@
 <script>
 import faqs from "@/fixtures/faqs.json";
 import AccordionItem from "./AccordionItem";
+import Optform from "@/components/Optform";
 
 export default {
   components: {
     AccordionItem,
+    Optform,
   },
   data: () => ({
     faqs,
