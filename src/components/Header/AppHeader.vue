@@ -4,29 +4,13 @@
     class="header-background"
     :style="{ backgroundImage: `url(${backgroundImage}` }"
   >
-    <div class="header-frame">
-      <router-link to="/">
-        <AppLogo />
-      </router-link>
-      <router-link class="header-buttonlink" :to="ROUTES.SIGN_IN">
-        Sign In
-      </router-link>
-    </div>
-    <Feature />
+    <slot name="header-navigation"></slot>
+    <slot name="header-feature"></slot>
   </div>
 </template>
 
 <script>
-import AppLogo from "@/components/static/AppLogo";
-import Feature from "@/components/Feature";
-
-import * as ROUTES from "@/constants/routes";
-
 export default {
-  components: {
-    AppLogo,
-    Feature,
-  },
   props: {
     src: {
       type: String,
@@ -36,9 +20,6 @@ export default {
       default: true,
     },
   },
-  data: () => ({
-    ROUTES,
-  }),
   computed: {
     backgroundImage() {
       return !this.src
@@ -49,7 +30,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header-background {
   display: flex;
   flex-direction: column;
@@ -81,24 +62,6 @@ export default {
 
   @media (max-width: 1000px) {
     margin: 0 30px;
-  }
-}
-
-.header-buttonlink {
-  display: block;
-  background-color: #e50914;
-  width: 84px;
-  height: fit-content;
-  color: white;
-  border: 0;
-  font-size: 15px;
-  border-radius: 3px;
-  padding: 8px 17px;
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    background: #f40612;
   }
 }
 </style>
