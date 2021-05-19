@@ -1,18 +1,29 @@
 <template>
   <div class="form-container">
-    <div v-if="error" class="form-error"></div>
+    <div v-if="error" class="form-error">{{ error }}</div>
     <h1 class="form-title">
       {{ isSignIn ? "Sign In" : "Sign Up" }}
     </h1>
-    <form class="form-base" @submit.prevent="" method="post">
+    <form class="form-base" @submit.prevent="formSubmit" method="post">
       <input
         v-if="!isSignIn"
         placeholder="First Name"
+        v-model="firstName"
         class="form-input"
         type="text"
       />
-      <input placeholder="Email Address" class="form-input" type="text" />
-      <input placeholder="Password" class="form-input" type="password" />
+      <input
+        placeholder="Email Address"
+        v-model="emailAddress"
+        class="form-input"
+        type="text"
+      />
+      <input
+        placeholder="Password"
+        class="form-input"
+        v-model="password"
+        type="password"
+      />
       <button class="form-submit" type="submit">
         {{ isSignIn ? "Sign In" : "Sign Up" }}
       </button>
@@ -37,13 +48,27 @@
 import * as ROUTES from "@/constants/routes";
 
 export default {
+  props: {
+    error: {
+      type: String,
+      default: "",
+    },
+  },
   data: () => ({
     ROUTES,
-    error: false,
+    firstName: "",
+    emailAddress: "",
+    password: "",
   }),
   computed: {
     isSignIn() {
       return this.$route.name === "Sign In";
+    },
+  },
+  methods: {
+    formSubmit() {
+      let { firstName, emailAddress, password } = this;
+      this.$emit("formSubmit", { firstName, emailAddress, password });
     },
   },
 };
