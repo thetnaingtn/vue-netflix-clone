@@ -1,6 +1,6 @@
 <template>
   <div class="header-group">
-    <slot name="header-group"></slot>
+    <slot></slot>
   </div>
 </template>
 
