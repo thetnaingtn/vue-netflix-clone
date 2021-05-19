@@ -14,7 +14,7 @@ export default {
     AppFooter,
   },
   setup() {
-    const user = getUser || { name: "tnt" };
+    const user = getUser;
     onMounted(fetchUser);
 
     return {
