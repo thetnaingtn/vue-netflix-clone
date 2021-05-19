@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="bg"
     class="header-background"
     :style="{ backgroundImage: `url(${backgroundImage}` }"
   >
@@ -22,9 +21,11 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return !this.src
-        ? "/images/misc/home-bg.jpg"
-        : `/images/misc/${this.src}.jpg`;
+      return this.bg
+        ? !this.src
+          ? "/images/misc/home-bg.jpg"
+          : `/images/misc/${this.src}.jpg`
+        : "none";
     },
   },
 };

@@ -2,12 +2,20 @@
 import { ref, computed, onUnmounted } from 'vue';
 import { firebase } from '@/lib/firebase.prod';
 
-const store = ref({ user: localStorage.getItem("authUser") });
+const store = ref({
+    user: localStorage.getItem("authUser"),
+    profile: {}
+});
 
 const getUser = computed(() => store.value.user);
+const getProfile = computed(() => store.value.profile);
 
 const setUser = (user) => {
     store.value.user = user;
+}
+
+const setProfile = (profile) => {
+    store.value.profile = profile;
 }
 
 const fetchUser = async () => {
@@ -28,5 +36,7 @@ const fetchUser = async () => {
 
 export {
     getUser,
-    fetchUser
+    fetchUser,
+    getProfile,
+    setProfile
 }
