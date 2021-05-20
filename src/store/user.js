@@ -21,11 +21,9 @@ const setProfile = (profile) => {
 const fetchUser = async () => {
     const listener = firebase.auth().onAuthStateChanged(authUser => {
         if (authUser) {
-            console.log("auth", authUser);
             localStorage.setItem("authUser", JSON.stringify(authUser));
             setUser(authUser);
         } else {
-            console.log("auth", authUser);
             localStorage.removeItem("authUser")
             setUser(null);
         }
