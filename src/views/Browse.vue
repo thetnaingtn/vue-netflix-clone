@@ -91,6 +91,7 @@ import { getProfile } from "@/store/user";
 import useContent from "@/composable/use-content";
 import * as ROUTES from "@/constants/routes";
 import selectionFilter from "@/util/selectionFilter";
+import useContentSearch from "@/composable/use-content-search";
 
 export default {
   components: {
@@ -124,7 +125,10 @@ export default {
       selectionFilter({ series: series.value, films: films.value })
     );
 
-    const slideRows = computed(() => slides.value[category.value]);
+    const slideRows = useContentSearch(
+      computed(() => slides.value[category.value]),
+      searchTerm
+    );
 
     return {
       profile,

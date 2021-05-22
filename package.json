@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.12.1",
     "firebase": "^7.24.0",
+    "fuse.js": "^6.4.6",
     "normalize.css": "^8.0.1",
     "vue": "^3.0.11",
     "vue-router": "^4.0.8"
