@@ -55,13 +55,19 @@
         </HeaderFeature>
       </template>
     </AppHeader>
+    <CardGroup>
+      <Card
+        v-for="card in slideRows"
+        :key="`${category}-${card.title.toLowerCase()}`"
+        v-bind="{ card, category }"
+      />
+    </CardGroup>
   </template>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import { watch, ref } from "vue";
-
+import { ref, computed } from "vue";
 import SelectProfile from "@/components/SelectProfile";
 import AppHeader from "@/components/Header/AppHeader";
 import AppHeaderNavigation from "@/components/Header/AppHeaderNavigation";
@@ -79,9 +85,12 @@ import {
   HeaderFeatureText,
 } from "@/components/Header";
 import Loading from "@/components/Loading";
+import { Card, CardGroup } from "@/components/Card";
 
 import { getProfile } from "@/store/user";
+import useContent from "@/composable/use-content";
 import * as ROUTES from "@/constants/routes";
+import selectionFilter from "@/util/selectionFilter";
 
 export default {
   components: {
@@ -100,22 +109,37 @@ export default {
     HeaderFeatureCallout,
     HeaderFeatureText,
     Loading,
+    Card,
+    CardGroup,
   },
   setup() {
     const profile = getProfile;
+    const category = ref("series");
+    const searchTerm = ref("");
+    const loading = ref(true);
+    const { series } = useContent("series");
+    const { films } = useContent("films");
+
+    const slides = computed(() =>
+      selectionFilter({ series: series.value, films: films.value })
+    );
+
+    const slideRows = computed(() => slides.value[category.value]);
 
     return {
       profile,
+      loading,
+      series,
+      searchTerm,
+      slideRows,
+      category,
     };
   },
   data: () => ({
     ROUTES,
-    category: "series",
-    searchTerm: "",
-    loading: true,
   }),
   watch: {
-    profile(val) {
+    profile() {
       setTimeout(() => {
         this.loading = false;
       }, 3000);
