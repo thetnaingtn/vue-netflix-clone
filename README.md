@@ -1,24 +1,4 @@
-# netflix-clone
+# Netflix clone build by using Vue3's features(Composition API, Teleport).
 
-## Project setup
-```
-npm install
-```
+In this project, composition api is used as an alternative for vuex store and used to share logic between components.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
