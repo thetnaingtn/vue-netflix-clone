@@ -23,15 +23,18 @@
           }}
         </p>
       </CardGroup>
+      <Player src="/videos/bunny.mp4" />
     </div>
   </div>
 </template>
 
 <script>
 import CardGroup from "@/components/Card/CardGroup";
+import Player from "@/components/Player.vue";
 export default {
   components: {
     CardGroup,
+    Player,
   },
   props: {
     src: {
