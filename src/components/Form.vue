@@ -24,7 +24,11 @@
         v-model="password"
         type="password"
       />
-      <button class="form-submit" type="submit">
+      <button
+        :disabled="!emailAddress || !password"
+        class="form-submit"
+        type="submit"
+      >
         {{ isSignIn ? "Sign In" : "Sign Up" }}
       </button>
     </form>
