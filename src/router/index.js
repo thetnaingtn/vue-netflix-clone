@@ -1,28 +1,37 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import { watchEffect } from "vue";
+
+import Home from "@/views/Home";
+import Signin from "@/views/Signin";
+import Signup from "@/views/Signup";
+import Browse from "@/views/Browse";
 
 import * as ROUTES from '@/constants/routes';
-const user = localStorage.getItem("authUser");
+import useAuthListener from '@/composable/use-auth-listener';
+
+const routeNames = ["Sign Up", "Sign In", "Home"];
+const { user } = useAuthListener();
 
 const routes = [
   {
     path: ROUTES.HOME,
     name: 'Home',
-    component: () => import("@/views/Home.vue")
+    component: Home,
   },
   {
     path: ROUTES.SIGN_IN,
     name: 'Sign In',
-    component: () => import("@/views/Signin.vue")
+    component: Signin,
   },
   {
     path: ROUTES.SIGN_UP,
     name: 'Sign Up',
-    component: () => import("@/views/Signup.vue")
+    component: Signup,
   },
   {
     path: ROUTES.BROWSE,
     name: 'Browse',
-    component: () => import("@/views/Browse.vue")
+    component: Browse,
   },
 ]
 
@@ -31,15 +40,13 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  let routeNames = ["Sign In", "Sign Up", "Home"];
-  if (routeNames.includes(to.name) && user) {
-    next({ name: "Browse" })
-  } else if (to.name === 'Browse' && !user) {
-    next({ name: "Sign In" })
-  } else {
+router.beforeEach((to, _, next) => {
+  watchEffect(() => {
+    if (!user.value && to.name === 'Browse') return next({ name: "Sign In" })
+    if (user.value && routeNames.includes(to.name)) return next({ name: "Browse" })
     next()
-  }
+  })
 })
+
 
 export default router

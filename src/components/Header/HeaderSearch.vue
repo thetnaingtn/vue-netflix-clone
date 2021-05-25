@@ -1,5 +1,8 @@
 <template>
   <div class="header-search">
+    <button @click="() => (active = !active)" class="header-search-icon">
+      <img src="/images/icons/search.png" alt="Search" />
+    </button>
     <input
       :class="['header-search-input', active ? 'active' : 'inactive']"
       placeholder="Search Series and Films"
@@ -7,9 +10,6 @@
       :value="searchTerm"
       @input="search"
     />
-    <button @click="() => (active = !active)" class="header-search-icon">
-      <img src="/images/icons/search.png" alt="Search" />
-    </button>
   </div>
 </template>
 
