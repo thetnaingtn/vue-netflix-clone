@@ -15,15 +15,18 @@
 </template>
 
 <script>
-import { getUser, setProfile } from "@/store/user";
+import useAuthListener from "@/composable/use-auth-listener";
+import { setProfile } from "@/composable/use-profile.js";
+import { onUnmounted } from "@vue/runtime-core";
 
 export default {
   setup() {
-    const user = getUser;
-
+    const { user, listener } = useAuthListener();
+    onUnmounted(() => {
+      listener.value();
+    });
     return {
       user,
-      setProfile,
     };
   },
   computed: {
@@ -35,7 +38,7 @@ export default {
   },
   methods: {
     selectProfile() {
-      this.setProfile({
+      setProfile({
         displayName: this.user.displayName,
         photoURL: this.user.photoURL,
       });

@@ -27,13 +27,12 @@
                 <HeaderPicture :src="profile.photoURL" />
                 <HeaderDropdown>
                   <HeaderGroup>
+                    {{ profile.photoURL }}
                     <HeaderPicture :src="profile.photoURL" />
                     <HeaderTextLink>{{ profile.displayName }}</HeaderTextLink>
                   </HeaderGroup>
                   <HeaderGroup>
-                    <HeaderTextLink @click="() => firebase.auth().signOut()">
-                      Sign Out
-                    </HeaderTextLink>
+                    <HeaderTextLink @click="signOut"> Sign Out </HeaderTextLink>
                   </HeaderGroup>
                 </HeaderDropdown>
               </HeaderProfile>
@@ -67,7 +66,7 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import SelectProfile from "@/components/SelectProfile";
 import AppHeader from "@/components/Header/AppHeader";
 import AppHeaderNavigation from "@/components/Header/AppHeaderNavigation";
@@ -87,12 +86,13 @@ import {
 import Loading from "@/components/Loading";
 import { Card, CardGroup } from "@/components/Card";
 
-import { getProfile } from "@/store/user";
-import useContent from "@/composable/use-content";
 import * as ROUTES from "@/constants/routes";
+import { firebase } from "@/lib/firebase.prod";
 import selectionFilter from "@/util/selectionFilter";
-import useContentSearch from "@/composable/use-content-search";
 
+import useContent from "@/composable/use-content";
+import useContentSearch from "@/composable/use-content-search";
+import { getProfile } from "@/composable/use-profile";
 export default {
   components: {
     SelectProfile,
@@ -114,7 +114,7 @@ export default {
     CardGroup,
   },
   setup() {
-    const profile = getProfile;
+    const profile = getProfile();
     const category = ref("series");
     const searchTerm = ref("");
     const loading = ref(true);
@@ -130,6 +130,12 @@ export default {
       searchTerm
     );
 
+    watch(profile, () => {
+      setTimeout(() => {
+        loading.value = false;
+      }, 3000);
+    });
+
     return {
       profile,
       loading,
@@ -142,11 +148,10 @@ export default {
   data: () => ({
     ROUTES,
   }),
-  watch: {
-    profile() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 3000);
+  methods: {
+    signOut() {
+      firebase.auth().signOut();
+      this.$router.push({ name: "Sign In" });
     },
   },
 };
