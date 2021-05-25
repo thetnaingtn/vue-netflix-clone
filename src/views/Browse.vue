@@ -1,7 +1,7 @@
 <template>
   <SelectProfile v-if="!profile.displayName" />
   <template v-else>
-    <Loading v-show="loading" :src="profile.photoURL" />
+    <Loading :src="profile.photoURL" />
     <AppHeader v-if="!loading" src="joker1">
       <template v-slot:header-navigation>
         <AppHeaderNavigation>
@@ -61,6 +61,7 @@
         v-bind="{ card, category }"
       />
     </CardGroup>
+    <AppFooter />
   </template>
 </template>
 
@@ -69,6 +70,7 @@
 import { ref, computed, watch } from "vue";
 import SelectProfile from "@/components/SelectProfile";
 import AppHeader from "@/components/Header/AppHeader";
+import AppFooter from "@/components/AppFooter";
 import AppHeaderNavigation from "@/components/Header/AppHeaderNavigation";
 import AppLogo from "@/components/static/AppLogo";
 import {
@@ -97,6 +99,7 @@ export default {
   components: {
     SelectProfile,
     AppHeader,
+    AppFooter,
     AppHeaderNavigation,
     AppLogo,
     HeaderGroup,

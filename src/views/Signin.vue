@@ -7,17 +7,20 @@
       <Form @formSubmit="signIn" v-bind="{ error }" />
     </template>
   </AppHeader>
+  <AppFooter />
 </template>
 
 <script>
 import { firebase } from "@/lib/firebase.prod";
 
 import AppHeader from "@/components/Header/AppHeader";
+import AppFooter from "@/components/AppFooter";
 import AppHeaderNavigation from "@/components/Header/AppHeaderNavigation";
 import Form from "@/components/Form";
 
 export default {
   components: {
+    AppFooter,
     AppHeader,
     AppHeaderNavigation,
     Form,
