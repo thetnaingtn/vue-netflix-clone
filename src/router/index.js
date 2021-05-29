@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { watchEffect } from "vue";
+
 
 import Home from "@/views/Home";
 import Signin from "@/views/Signin";
@@ -7,10 +7,11 @@ import Signup from "@/views/Signup";
 import Browse from "@/views/Browse";
 
 import * as ROUTES from '@/constants/routes';
-import useAuthListener from '@/composable/use-auth-listener';
+import { user } from '@/composable/use-auth-listener';
+import { unSubscribe, useAuthListener } from '../composable/use-auth-listener';
 
 const routeNames = ["Sign Up", "Sign In", "Home"];
-const { user } = useAuthListener();
+
 
 const routes = [
   {
@@ -40,12 +41,15 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, _, next) => {
-  watchEffect(() => {
-    if (!user.value && to.name === 'Browse') return next({ name: "Sign In" })
-    if (user.value && routeNames.includes(to.name)) return next({ name: "Browse" })
-    next()
-  })
+router.beforeEach(async (to, _, next) => {
+  await useAuthListener();
+  if (!user.value && to.name === 'Browse') next({ name: "Sign In" })
+  else if (user.value && routeNames.includes(to.name)) next({ name: "Browse" })
+  else next()
+})
+
+router.beforeResolve(() => {
+  unSubscribe && unSubscribe.value();
 })
 
 

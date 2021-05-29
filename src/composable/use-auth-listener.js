@@ -1,22 +1,36 @@
+/* eslint-disable no-unused-vars */
+
 import { reactive, toRefs } from "vue";
 
 import { firebase } from "@/lib/firebase.prod";
 
-export default function useAuthListener() {
-    const state = reactive({
-        listener: null,
-        user: localStorage.getItem("authUser"),
-    })
+const state = reactive({
+    unSubscribe: null,
+    user: JSON.parse(localStorage.getItem("authUser")),
+})
 
-    state.listener = firebase.auth().onAuthStateChanged(authUser => {
-        if (authUser) {
-            localStorage.setItem("authUser", JSON.stringify(authUser));
-            state.user = authUser;
-        } else {
-            localStorage.removeItem("authUser")
-            state.user = null;
-        }
-    })
+const { unSubscribe, user } = toRefs(state);
+function useAuthListener() {
+    return new Promise((resolve) => {
+        if (state.user) resolve();
+        state.unSubscribe = firebase.auth().onAuthStateChanged(authUser => {
+            console.log("listened");
+            if (authUser) {
+                localStorage.setItem("authUser", JSON.stringify(authUser))
+                state.user = authUser;
+            } else {
+                localStorage.setItem("authUser", null)
+                state.user = null;
+            }
+            resolve();
+        })
 
-    return { ...toRefs(state) }
+    })
+}
+
+
+export {
+    useAuthListener,
+    unSubscribe,
+    user
 }
