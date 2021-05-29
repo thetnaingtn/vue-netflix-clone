@@ -1,8 +1,10 @@
 <template>
-  <SelectProfile v-if="!profile.displayName" />
+  <template v-if="!profile.displayName">
+    <SelectProfile v-if="!profile.displayName" />
+  </template>
   <template v-else>
-    <Loading :src="profile.photoURL" />
-    <AppHeader v-if="!loading" src="joker1">
+    <Loading v-if="loading" :src="profile.photoURL" />
+    <AppHeader v-else src="joker1">
       <template v-slot:header-navigation>
         <AppHeaderNavigation>
           <template v-slot:header-navigations>
@@ -153,8 +155,12 @@ export default {
   }),
   methods: {
     signOut() {
-      firebase.auth().signOut();
-      this.$router.push({ name: "Sign In" });
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push({ name: "Sign In" });
+        });
     },
   },
 };

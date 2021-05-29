@@ -15,16 +15,11 @@
 </template>
 
 <script>
-import useAuthListener from "@/composable/use-auth-listener";
 import { setProfile } from "@/composable/use-profile.js";
-import { onUnmounted } from "@vue/runtime-core";
+import { user } from "@/composable/use-auth-listener";
 
 export default {
   setup() {
-    const { user, listener } = useAuthListener();
-    onUnmounted(() => {
-      listener.value();
-    });
     return {
       user,
     };
